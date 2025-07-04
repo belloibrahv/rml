@@ -56,7 +56,7 @@ rml/
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/ai-career-recommendation.git
+   git clone https://github.com/belloibrahv/rml.git
    cd ai-career-recommendation
    ```
 
