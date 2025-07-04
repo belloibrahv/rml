@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Career Recommendation - AI Career System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>NDA Career AI</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/recommend" class="nav-link active">Get Recommendation</a>
+                <a href="/about" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main style="margin-top: 80px;">
+        <section class="hero" style="min-height: 40vh; padding: 60px 0;">
+            <div class="hero-content">
+                <div>
+                    <h1>Get Your Career Recommendation</h1>
+                    <p class="hero-subtitle">Fill out the form below to receive personalized career suggestions tailored to your background and interests.</p>
+                </div>
+                <div class="hero-image">
+                    <i class="fas fa-magic"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="recommendation-section">
+            <div class="container">
+                <form id="career-form" class="career-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="name">
+                                <i class="fas fa-user"></i>
+                                Full Name
+                            </label>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i>
+                                Email Address
+                            </label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="education-level">
+                                <i class="fas fa-graduation-cap"></i>
+                                Education Level
+                            </label>
+                            <select id="education-level" name="education_level" required>
+                                <option value="">Select your education level</option>
+                                <option value="Secondary School">Secondary School</option>
+                                <option value="Diploma/Certificate">Diploma/Certificate</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="PhD/Doctorate">PhD/Doctorate</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="preferred-industry">
+                                <i class="fas fa-industry"></i>
+                                Preferred Industry (Optional)
+                            </label>
+                            <select id="preferred-industry" name="preferred_industry">
+                                <option value="">Any Industry</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Business">Business</option>
+                                <option value="Education">Education</option>
+                                <option value="Creative Arts">Creative Arts</option>
+                                <option value="Engineering">Engineering</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Your Skills</h3>
+                        <p>Select or add your key skills and competencies:</p>
+                        <div class="skills-container">
+                            <div class="skills-grid" id="skills-grid">
+                                <!-- Skills will be loaded here -->
+                            </div>
+                            <div class="custom-input">
+                                <input type="text" id="custom-skill" placeholder="Add custom skill">
+                                <button type="button" id="add-skill-btn" class="btn btn-outline">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Your Interests</h3>
+                        <p>Select or add your areas of interest and passion:</p>
+                        <div class="interests-container">
+                            <div class="interests-grid" id="interests-grid">
+                                <!-- Interests will be loaded here -->
+                            </div>
+                            <div class="custom-input">
+                                <input type="text" id="custom-interest" placeholder="Add custom interest">
+                                <button type="button" id="add-interest-btn" class="btn btn-outline">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-magic"></i>
+                        Get My Career Recommendation
+                    </button>
+                </form>
+                
+                <div id="result-section" class="result-section" style="display: none;">
+                    <!-- Results will be displayed here -->
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Why Choose Our AI Career System?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>All Education Levels</h3>
+                        <p>From secondary school to PhD, our system provides relevant recommendations for every educational background.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>AI-Powered Analysis</h3>
+                        <p>Advanced machine learning algorithms analyze your skills, interests, and education to provide accurate career matches.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Comprehensive Careers</h3>
+                        <p>Covering technology, healthcare, business, education, creative arts, and engineering with detailed career information.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Growth Insights</h3>
+                        <p>Get information about salary ranges, growth potential, and required skills for each recommended career path.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>NDA Career AI</h3>
+                    <p>Empowering Nigerian students and professionals with AI-driven career guidance.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/recommend">Get Recommendation</a></li>
+                        <li><a href="/about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Nigerian Defence Academy</p>
+                    <p>Kaduna, Nigeria</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Nigerian Defence Academy. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load skills and interests
+        async function loadFormData() {
+            try {
+                const [skillsResponse, interestsResponse] = await Promise.all([
+                    fetch('/api/skills'),
+                    fetch('/api/interests')
+                ]);
+                
+                const skillsData = await skillsResponse.json();
+                const interestsData = await interestsResponse.json();
+                
+                populateSkills(skillsData.skills);
+                populateInterests(interestsData.interests);
+            } catch (error) {
+                console.error('Error loading form data:', error);
+            }
+        }
+
+        function populateSkills(skills) {
+            const skillsGrid = document.getElementById('skills-grid');
+            skillsGrid.innerHTML = skills.map(skill => `
+                <label class="skill-item">
+                    <input type="checkbox" name="skills" value="${skill}">
+                    <span>${skill}</span>
+                </label>
+            `).join('');
+        }
+
+        function populateInterests(interests) {
+            const interestsGrid = document.getElementById('interests-grid');
+            interestsGrid.innerHTML = interests.map(interest => `
+                <label class="interest-item">
+                    <input type="checkbox" name="interests" value="${interest}">
+                    <span>${interest}</span>
+                </label>
+            `).join('');
+        }
+
+        // Handle form submission
+        document.getElementById('career-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const skills = Array.from(document.querySelectorAll('input[name="skills"]:checked')).map(cb => cb.value);
+            const interests = Array.from(document.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value);
+            
+            if (!skills.length && !interests.length) {
+                alert('Please select at least one skill or interest');
+                return;
+            }
+            
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            submitBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        email: formData.get('email'),
+                        education_level: formData.get('education_level'),
+                        preferred_industry: formData.get('preferred_industry'),
+                        skills: skills,
+                        interests: interests
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResult(data);
+                } else {
+                    alert(data.message || 'An error occurred');
+                }
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            } finally {
+                submitBtn.innerHTML = '<i class="fas fa-magic"></i> Get My Career Recommendation';
+                submitBtn.disabled = false;
+            }
+        });
+
+        function displayResult(data) {
+            const resultSection = document.getElementById('result-section');
+            const careerDetails = data.career_details;
+            
+            resultSection.innerHTML = `
+                <div class="result-card">
+                    <div class="result-header">
+                        <h2>Your Career Recommendation</h2>
+                        <div class="confidence-badge ${getConfidenceClass(data.confidence)}">
+                            ${data.confidence}% Confidence
+                        </div>
+                    </div>
+                    
+                    <div class="career-result">
+                        <h3>${data.primary_career}</h3>
+                        <p class="career-description">${careerDetails.details.description}</p>
+                        
+                        <div class="career-details">
+                            <div class="detail-item">
+                                <strong>Industry:</strong> ${careerDetails.industry}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Salary Range:</strong> ${careerDetails.details.salary_range}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Growth Potential:</strong> ${careerDetails.details.growth}
+                            </div>
+                            <div class="detail-item">
+                                <strong>Required Skills:</strong> ${careerDetails.details.skills.join(', ')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alternative-careers">
+                        <h4>Alternative Career Options</h4>
+                        <div class="alternatives-grid">
+                            ${data.alternative_careers.map(career => `
+                                <div class="alternative-item">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span>${career}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="analysis-summary">
+                        <h4>Analysis Summary</h4>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <strong>Education Level:</strong> ${data.education_level}
+                            </div>
+                            <div class="summary-item">
+                                <strong>Skills Analyzed:</strong> ${data.skills_analyzed.join(', ') || 'None'}
+                            </div>
+                            <div class="summary-item">
+                                <strong>Interests Analyzed:</strong> ${data.interests_analyzed.join(', ') || 'None'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            resultSection.style.display = 'block';
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getConfidenceClass(confidence) {
+            if (confidence >= 80) return 'high';
+            if (confidence >= 60) return 'medium';
+            return 'low';
+        }
+
+        // Add custom skills and interests
+        document.getElementById('add-skill-btn').addEventListener('click', function() {
+            const input = document.getElementById('custom-skill');
+            const skill = input.value.trim();
+            if (skill) {
+                const skillsGrid = document.getElementById('skills-grid');
+                const newSkill = document.createElement('label');
+                newSkill.className = 'skill-item';
+                newSkill.innerHTML = `
+                    <input type="checkbox" name="skills" value="${skill}" checked>
+                    <span>${skill}</span>
+                `;
+                skillsGrid.appendChild(newSkill);
+                input.value = '';
+            }
+        });
+
+        document.getElementById('add-interest-btn').addEventListener('click', function() {
+            const input = document.getElementById('custom-interest');
+            const interest = input.value.trim();
+            if (interest) {
+                const interestsGrid = document.getElementById('interests-grid');
+                const newInterest = document.createElement('label');
+                newInterest.className = 'interest-item';
+                newInterest.innerHTML = `
+                    <input type="checkbox" name="interests" value="${interest}" checked>
+                    <span>${interest}</span>
+                `;
+                interestsGrid.appendChild(newInterest);
+                input.value = '';
+            }
+        });
+
+        // Load form data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFormData();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - NDA Career AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>NDA Career AI</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link">Dashboard</a>
+                <a href="/recommend" class="nav-link">Get Recommendation</a>
+                <a href="/analytics" class="nav-link active">Analytics</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="analytics-container">
+        <div class="analytics-header">
+            <h1>Your Career Analytics</h1>
+            <p>Track your career exploration journey and insights</p>
+        </div>
+
+        <div class="analytics-grid">
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="total-recommendations">0</h3>
+                        <p>Total Recommendations</p>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="avg-confidence">0%</h3>
+                        <p>Average Confidence</p>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="days-active">0</h3>
+                        <p>Days Active</p>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 id="unique-careers">0</h3>
+                        <p>Unique Careers</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <h3>Career Distribution</h3>
+                    <canvas id="careerChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Confidence Trends</h3>
+                    <canvas id="confidenceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recommendation History -->
+            <div class="history-section">
+                <h3>Recommendation History</h3>
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Career</th>
+                                <th>Confidence</th>
+                                <th>Skills</th>
+                                <th>Interests</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody">
+                            <!-- History data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Insights Section -->
+            <div class="insights-section">
+                <h3>Career Insights</h3>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <h4>Top Recommended Career</h4>
+                        <p id="top-career">No data available</p>
+                    </div>
+                    <div class="insight-card">
+                        <h4>Most Common Skills</h4>
+                        <p id="common-skills">No data available</p>
+                    </div>
+                    <div class="insight-card">
+                        <h4>Most Common Interests</h4>
+                        <p id="common-interests">No data available</p>
+                    </div>
+                    <div class="insight-card">
+                        <h4>Confidence Trend</h4>
+                        <p id="confidence-trend">No data available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let careerChart, confidenceChart;
+
+        // Load analytics data
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/api/analytics');
+                const data = await response.json();
+                
+                updateSummaryCards(data);
+                updateCharts(data);
+                updateHistoryTable(data);
+                updateInsights(data);
+                
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        function updateSummaryCards(data) {
+            document.getElementById('total-recommendations').textContent = data.total_recommendations;
+            document.getElementById('avg-confidence').textContent = data.avg_confidence + '%';
+            
+            // Calculate days active (simplified)
+            if (data.recommendations.length > 0) {
+                const firstDate = new Date(data.recommendations[data.recommendations.length - 1].date);
+                const lastDate = new Date(data.recommendations[0].date);
+                const daysDiff = Math.ceil((lastDate - firstDate) / (1000 * 60 * 60 * 24)) + 1;
+                document.getElementById('days-active').textContent = daysDiff;
+            }
+            
+            // Calculate unique careers
+            const uniqueCareers = new Set(data.career_distribution.map(item => item.career));
+            document.getElementById('unique-careers').textContent = uniqueCareers.size;
+        }
+
+        function updateCharts(data) {
+            // Career Distribution Chart
+            const careerCtx = document.getElementById('careerChart').getContext('2d');
+            if (careerChart) careerChart.destroy();
+            
+            careerChart = new Chart(careerCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.career_distribution.map(item => item.career),
+                    datasets: [{
+                        data: data.career_distribution.map(item => item.count),
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                            '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Confidence Trends Chart
+            const confidenceCtx = document.getElementById('confidenceChart').getContext('2d');
+            if (confidenceChart) confidenceChart.destroy();
+            
+            const recentRecommendations = data.recommendations.slice(0, 10).reverse();
+            
+            confidenceChart = new Chart(confidenceCtx, {
+                type: 'line',
+                data: {
+                    labels: recentRecommendations.map((_, index) => `Rec ${index + 1}`),
+                    datasets: [{
+                        label: 'Confidence Score',
+                        data: recentRecommendations.map(rec => rec.confidence),
+                        borderColor: '#36A2EB',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateHistoryTable(data) {
+            const tbody = document.getElementById('history-tbody');
+            tbody.innerHTML = data.recommendations.map(rec => `
+                <tr>
+                    <td>${new Date(rec.date).toLocaleDateString()}</td>
+                    <td><strong>${rec.career}</strong></td>
+                    <td>
+                        <span class="confidence-badge ${getConfidenceClass(rec.confidence)}">
+                            ${rec.confidence}%
+                        </span>
+                    </td>
+                    <td>${rec.skills || 'N/A'}</td>
+                    <td>${rec.interests || 'N/A'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateInsights(data) {
+            // Top recommended career
+            if (data.career_distribution.length > 0) {
+                const topCareer = data.career_distribution[0];
+                document.getElementById('top-career').textContent = `${topCareer.career} (${topCareer.count} times)`;
+            }
+            
+            // Most common skills (simplified analysis)
+            const allSkills = data.recommendations
+                .filter(rec => rec.skills)
+                .map(rec => rec.skills.split(','))
+                .flat()
+                .map(skill => skill.trim())
+                .filter(Boolean);
+            
+            if (allSkills.length > 0) {
+                const skillCounts = {};
+                allSkills.forEach(skill => {
+                    skillCounts[skill] = (skillCounts[skill] || 0) + 1;
+                });
+                const topSkills = Object.entries(skillCounts)
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 3)
+                    .map(([skill, count]) => `${skill} (${count})`)
+                    .join(', ');
+                document.getElementById('common-skills').textContent = topSkills;
+            }
+            
+            // Confidence trend
+            if (data.recommendations.length >= 2) {
+                const recent = data.recommendations[0].confidence;
+                const older = data.recommendations[data.recommendations.length - 1].confidence;
+                const trend = recent > older ? 'Improving' : recent < older ? 'Declining' : 'Stable';
+                document.getElementById('confidence-trend').textContent = trend;
+            }
+        }
+
+        function getConfidenceClass(confidence) {
+            if (confidence >= 80) return 'high';
+            if (confidence >= 60) return 'medium';
+            return 'low';
+        }
+
+        // Load analytics on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAnalytics();
+        });
+    </script>
+</body>
+</html> 

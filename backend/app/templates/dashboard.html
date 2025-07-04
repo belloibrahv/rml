@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NDA Career AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>NDA Career AI</span>
+            </div>
+            <div class="nav-menu">
+                <a href="/dashboard" class="nav-link active">Dashboard</a>
+                <a href="/recommend" class="nav-link">Get Recommendation</a>
+                <a href="/analytics" class="nav-link">Analytics</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome back, <span id="username">User</span>!</h1>
+            <p>Ready to explore your career possibilities?</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h3>Get Career Recommendation</h3>
+                <p>Discover your ideal career path based on your skills and interests</p>
+                <a href="/recommend" class="btn btn-primary">
+                    <i class="fas fa-arrow-right"></i>
+                    Start Now
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3>View Analytics</h3>
+                <p>Track your career exploration journey and see your recommendation history</p>
+                <a href="/analytics" class="btn btn-secondary">
+                    <i class="fas fa-chart-line"></i>
+                    View Analytics
+                </a>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3>Recent Recommendations</h3>
+                <div id="recent-recommendations">
+                    <p>No recommendations yet. Get started with your first career recommendation!</p>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3>Your Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-recommendations">0</span>
+                        <span class="stat-label">Total Recommendations</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="avg-confidence">0%</span>
+                        <span class="stat-label">Avg Confidence</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="action-buttons">
+                <button class="btn btn-outline" onclick="window.location.href='/recommend'">
+                    <i class="fas fa-plus"></i>
+                    New Recommendation
+                </button>
+                <button class="btn btn-outline" onclick="window.location.href='/analytics'">
+                    <i class="fas fa-chart-pie"></i>
+                    View Reports
+                </button>
+                <button class="btn btn-outline" onclick="refreshDashboard()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh Data
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load user data and dashboard stats
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/analytics');
+                const data = await response.json();
+                
+                // Update stats
+                document.getElementById('total-recommendations').textContent = data.total_recommendations;
+                document.getElementById('avg-confidence').textContent = data.avg_confidence + '%';
+                
+                // Update recent recommendations
+                const recentDiv = document.getElementById('recent-recommendations');
+                if (data.recommendations.length > 0) {
+                    const recent = data.recommendations.slice(0, 3);
+                    recentDiv.innerHTML = recent.map(rec => `
+                        <div class="recent-item">
+                            <strong>${rec.career}</strong>
+                            <span class="confidence">${rec.confidence}% confidence</span>
+                            <small>${new Date(rec.date).toLocaleDateString()}</small>
+                        </div>
+                    `).join('');
+                } else {
+                    recentDiv.innerHTML = '<p>No recommendations yet. Get started with your first career recommendation!</p>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        function refreshDashboard() {
+            loadDashboardData();
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+    </script>
+</body>
+</html> 
