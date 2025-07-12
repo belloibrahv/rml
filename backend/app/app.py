@@ -7,6 +7,13 @@ import sqlite3
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
+# Vercel deployment configuration
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=5001)
+else:
+    # For Vercel serverless deployment
+    app.debug = False
+
 # Database setup
 def init_db():
     conn = sqlite3.connect('career_reco.db')
@@ -517,6 +524,11 @@ def normalize_education_level(education_level):
     }
     return mapping.get(education_level, education_level)
 
+# Initialize database only when running locally
 if __name__ == "__main__":
     init_db()
     app.run(debug=True, host='0.0.0.0', port=5001)
+
+# Vercel serverless handler
+def handler(request, context):
+    return app(request, context)
