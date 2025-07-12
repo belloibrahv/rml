@@ -309,11 +309,13 @@ def get_ml_career_recommendation(skills, interests, education_level, preferred_i
     # Combine features
     X = pd.concat([pd.DataFrame({'Age': [age]}), education_encoded, skills_df, interests_df], axis=1)
     
-    # Ensure all expected columns are present
+    # Ensure all expected columns are present and in correct order
     expected_columns = career_model.feature_names_in_
     for col in expected_columns:
         if col not in X.columns:
             X[col] = 0
+    
+    # Reorder columns to match training data
     X = X[expected_columns]
     
     # Make prediction
