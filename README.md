@@ -1,163 +1,80 @@
-# AI-Powered Career Recommendation System 🚀
+# AI Career Recommendation System 🚀
 
-A comprehensive career recommendation system that helps users discover suitable career paths based on their skills, interests, education level, and preferred industry. Built with Flask backend and modern HTML/CSS/JavaScript frontend.
+A modern, intelligent career recommendation system that helps users discover suitable career paths based on their skills, interests, and education level.
 
 ## 🌟 Features
 
-### Core Functionality
-- **Intelligent Career Matching**: Rule-based recommendation system that analyzes skills, interests, and education level
-- **Multi-Industry Support**: Covers Technology, Healthcare, Business, Education, Creative Arts, and Engineering
-- **Education Level Compatibility**: Recommendations tailored to Secondary School, Diploma, Bachelor's, Master's, and PhD levels
-- **Detailed Career Information**: Salary ranges (in Naira), required skills, growth potential, and job descriptions
-- **Alternative Career Suggestions**: Provides backup career options based on user profile
-- **Confidence Scoring**: Shows recommendation confidence based on input quality
-
-### User Experience
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-- **Interactive Form**: Easy-to-use interface with skill and interest selection
-- **Real-time Validation**: Form validation and error handling
-- **Detailed Results**: Comprehensive career recommendations with actionable insights
-
-### Technical Features
-- **Flask Backend**: Robust Python backend with RESTful API
-- **SQLite Database**: Lightweight database for storing recommendations
-- **Rule-based AI**: Reliable recommendation engine without external dependencies
-- **Error Handling**: Comprehensive error handling and fallback mechanisms
-- **Logging**: Detailed logging for debugging and monitoring
+- **Intelligent Career Matching**: Rule-based recommendation system
+- **Multi-Industry Support**: Technology, Healthcare, Business, Education, Creative Arts, Engineering
+- **Education Level Compatibility**: Tailored recommendations for all education levels
+- **Detailed Career Information**: Salary ranges, required skills, growth potential
+- **Alternative Career Suggestions**: Multiple career options
+- **Confidence Scoring**: Shows recommendation confidence
+- **Responsive Design**: Works on all devices
 
 ## 🏗️ Project Structure
 
 ```
 rml/
-├── backend/
-│   ├── app/
-│   │   ├── app.py              # Main Flask application
-│   │   │   ├── index.html      # Landing page
-│   │   │   ├── recommend.html  # Recommendation form
-│   │   │   └── about.html      # About page
-│   │   └── static/             # CSS, JS, and assets
-│   ├── run.py                  # Application entry point
-│   ├── requirements.txt        # Python dependencies
-│   ├── start.sh               # Linux/Mac startup script
-│   ├── start.bat              # Windows startup script
-│   └── README.md              # Backend documentation
-├── career_reco.db             # SQLite database
-└── README.md                  # This file
+├── app.py                 # Main Flask application
+├── requirements.txt       # Python dependencies
+├── vercel.json           # Vercel deployment config
+├── runtime.txt           # Python version
+├── static/               # CSS, JS, and assets
+├── templates/            # HTML templates
+└── README.md            # This file
 ```
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Python 3.8 or higher
-- pip (Python package installer)
-- Git
+### Local Development
 
-### Installation Steps
-
-1. **Clone the Repository**
+1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/ai-career-recommendation.git
-   cd ai-career-recommendation
+   git clone https://github.com/belloibrahv/rml.git
+   cd rml
    ```
 
-2. **Navigate to Backend Directory**
-   ```bash
-   cd backend
-   ```
-
-3. **Create Virtual Environment**
-   ```bash
-   # On macOS/Linux
-   python3 -m venv venv
-   source venv/bin/activate
-   
-   # On Windows
-   python -m venv venv
-   venv\Scripts\activate
-   ```
-
-4. **Install Dependencies**
+2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-5. **Run the Application**
+3. **Run the application**
    ```bash
-   # Using Python directly
-   python run.py
-   
-   # Or using the provided scripts
-   # On macOS/Linux
-   chmod +x start.sh
-   ./start.sh
-   
-   # On Windows
-   start.bat
+   python app.py
    ```
 
-6. **Access the Application**
-   - Open your web browser
-   - Navigate to: `http://localhost:5001`
-   - The application will be ready to use!
+4. **Access the application**
+   - Open your browser
+   - Go to: `http://localhost:5001`
 
-## 📋 Usage Guide
+### Vercel Deployment
 
-### Getting Career Recommendations
+1. **Connect to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Sign up/Login with GitHub
+   - Click "New Project"
+   - Import repository: `belloibrahv/rml`
 
-1. **Fill Out the Form**
-   - Enter your name and email (optional)
-   - Select your education level
-   - Choose relevant skills from the dropdown
-   - Select your interests
-   - Optionally specify a preferred industry
+2. **Configure settings**
+   - Framework: `Other`
+   - Build Command: (leave empty)
+   - Output Directory: (leave empty)
+   - Install Command: `pip install -r requirements.txt`
 
-2. **Submit and Get Results**
-   - Click "Get Recommendation"
-   - View your personalized career recommendation
-   - Explore alternative career options
-   - Check confidence score and detailed information
+3. **Add environment variables**
+   ```
+   FLASK_ENV=production
+   FLASK_DEBUG=0
+   ```
 
-3. **Understanding Results**
-   - **Primary Career**: Your best match based on inputs
-   - **Alternative Careers**: Backup options to consider
-   - **Confidence Score**: How well your profile matches the recommendation
-   - **Career Details**: Salary range, required skills, growth potential
+4. **Deploy**
+   - Click "Deploy"
+   - Your app will be live at: `https://your-project-name.vercel.app`
 
-### Supported Education Levels
-- Secondary School
-- Diploma/Certificate
-- Bachelor's Degree
-- Master's Degree
-- PhD/Doctorate
+## 📋 API Endpoints
 
-### Available Industries
-- **Technology**: Software Engineering, Data Science, Web Development, Cybersecurity
-- **Healthcare**: Medical Doctor, Nursing, Pharmacy
-- **Business**: Business Analysis, Marketing, Finance
-- **Education**: Teaching, School Administration
-- **Creative Arts**: Graphic Design, Content Writing, Digital Marketing
-- **Engineering**: Civil, Mechanical, Electrical Engineering
-
-## 🛠️ Development
-
-### Running in Development Mode
-```bash
-cd backend
-python run.py
-```
-
-The application runs in debug mode by default, which enables:
-- Auto-reload on code changes
-- Detailed error messages
-- Development server features
-
-### Database
-The application uses SQLite for data storage:
-- Database file: `career_reco.db`
-- Automatically created on first run
-- Stores user recommendations and analytics
-
-### API Endpoints
 - `GET /` - Landing page
 - `GET /recommend` - Recommendation form
 - `GET /about` - About page
@@ -167,122 +84,121 @@ The application uses SQLite for data storage:
 - `GET /api/skills` - List available skills
 - `GET /api/interests` - List available interests
 
-## 🔧 Configuration
+## 🎯 Supported Careers
 
-### Port Configuration
-The application runs on port 5001 by default. To change the port:
-1. Edit `backend/run.py`
-2. Modify the port number in the `app.run()` call
-3. Restart the application
+### Technology
+- Software Engineer
+- Data Scientist
+- Web Developer
+- Cybersecurity Analyst
 
-### Database Configuration
-The SQLite database is automatically configured. For production use, consider:
-- Using PostgreSQL or MySQL
-- Implementing proper database migrations
-- Setting up database backups
+### Healthcare
+- Medical Doctor
+- Nurse
+- Pharmacist
 
-## 🐛 Troubleshooting
+### Business
+- Business Analyst
+- Marketing Manager
+- Financial Analyst
 
-### Common Issues
+### Education
+- Teacher
+- School Administrator
 
-**Port Already in Use**
-```bash
-# Kill existing process on port 5001
-lsof -ti:5001 | xargs kill -9
-# Or change port in run.py
-```
+### Creative Arts
+- Graphic Designer
+- Content Writer
+- Digital Marketing Specialist
 
-**Dependencies Not Found**
-```bash
-# Reinstall dependencies
-pip install -r requirements.txt --force-reinstall
-```
+### Engineering
+- Civil Engineer
+- Mechanical Engineer
+- Electrical Engineer
 
-**Virtual Environment Issues**
-```bash
-# Recreate virtual environment
-rm -rf venv
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
+## 🛠️ Technologies Used
 
-**Database Issues**
-```bash
-# Remove and recreate database
-rm career_reco.db
-python run.py
-```
+- **Backend**: Flask, Python
+- **Frontend**: HTML, CSS, JavaScript
+- **Deployment**: Vercel
+- **Database**: In-memory (no external dependencies)
 
 ## 📊 Features in Detail
 
 ### Career Database
-The system includes 18 detailed career profiles across 6 industries:
-- **Salary Information**: All salaries displayed in Nigerian Naira (₦)
-- **Education Requirements**: Specific education levels for each career
-- **Required Skills**: Key skills needed for success
-- **Growth Potential**: Career growth prospects (High, Medium, Very High)
+- 18 detailed career profiles
+- Salary information in Nigerian Naira (₦)
+- Education requirements
+- Required skills
+- Growth potential indicators
 
 ### Recommendation Algorithm
-- **Skill Matching**: Analyzes user skills against career requirements
-- **Interest Alignment**: Matches user interests with career fields
-- **Education Compatibility**: Ensures recommendations match education level
-- **Industry Preference**: Considers user's preferred industry
-- **Fallback Logic**: Provides sensible defaults when exact matches aren't found
+- Skill matching analysis
+- Interest alignment
+- Education compatibility
+- Industry preference consideration
+- Fallback logic for edge cases
 
 ### User Interface
-- **Responsive Design**: Works on all device sizes
-- **Modern UI**: Clean, professional interface
-- **Interactive Elements**: Dropdowns, checkboxes, and form validation
-- **Result Display**: Clear, organized presentation of recommendations
+- Responsive design
+- Modern, clean interface
+- Interactive form elements
+- Clear result presentation
 
-## 🤝 Contributing
+## 🔧 Development
 
-We welcome contributions! Here's how you can help:
+### Running in Development Mode
+```bash
+python app.py
+```
 
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Make your changes**
-4. **Test thoroughly**
-5. **Commit your changes**: `git commit -m 'Add amazing feature'`
-6. **Push to the branch**: `git push origin feature/amazing-feature`
-7. **Open a Pull Request**
+The application runs in debug mode by default, which enables:
+- Auto-reload on code changes
+- Detailed error messages
+- Development server features
 
-### Development Guidelines
-- Follow PEP 8 Python style guidelines
-- Add comments for complex logic
-- Include error handling
-- Test your changes before submitting
+### Project Structure
+```
+app.py              # Main Flask application
+requirements.txt    # Python dependencies
+vercel.json         # Vercel configuration
+runtime.txt         # Python version specification
+static/             # Static files (CSS, JS)
+templates/          # HTML templates
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+- Automatic HTTPS
+- Global CDN
+- Serverless functions
+- Easy GitHub integration
+
+### Other Platforms
+- Heroku
+- Railway
+- Render
+- DigitalOcean
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
-## 🙏 Acknowledgments
+## 🤝 Contributing
 
-- Built with Flask and modern web technologies
-- Career data sourced from industry research
-- UI/UX inspired by modern web design principles
-- Special thanks to the open-source community
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## 📞 Support
 
-If you encounter any issues or have questions:
-1. Check the troubleshooting section above
-2. Search existing issues in the GitHub repository
-3. Create a new issue with detailed information
-4. Include your operating system, Python version, and error messages
-
-## 🔮 Future Enhancements
-
-Planned features for future releases:
-- Machine learning model integration
-- User accounts and recommendation history
-- Advanced analytics and insights
-- Mobile app version
-- Multi-language support
-- Integration with job boards
-- Career path visualization
+If you encounter any issues:
+1. Check the troubleshooting section
+2. Review the documentation
+3. Create an issue on GitHub
 
 ---
 

@@ -1,52 +1,34 @@
 from flask import Flask, request, jsonify, render_template
-import os
-import pickle
+from flask_cors import CORS
 import json
 from datetime import datetime
-import sqlite3
+import os
+import pickle
+import joblib
+import numpy as np
+import pandas as pd
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
+CORS(app)
 
-# Vercel deployment configuration
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5001)
-else:
-    # For Vercel serverless deployment
-    app.debug = False
-
-# Database setup
-def init_db():
-    conn = sqlite3.connect('career_reco.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS recommendations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT,
-            email TEXT,
-            education_level TEXT,
-            skills TEXT,
-            interests TEXT,
-            preferred_industry TEXT,
-            recommended_career TEXT,
-            confidence_score REAL,
-            alternative_careers TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    conn.commit()
-    conn.close()
-
-# Load models - Temporarily disabled due to compatibility issues
+# Load ML models
 MODEL_DIR = os.path.join(os.path.dirname(__file__), "models")
 career_model = None
 label_encoder = None
 skills_mlb = None
 interests_mlb = None
 
-print("📝 Using rule-based career recommendations (ML models temporarily disabled)")
-print("🔧 This ensures the system works reliably while we resolve model compatibility issues")
+try:
+    career_model = joblib.load(os.path.join(MODEL_DIR, 'career_recommendation_model.pkl'))
+    label_encoder = joblib.load(os.path.join(MODEL_DIR, 'career_label_encoder.pkl'))
+    skills_mlb = joblib.load(os.path.join(MODEL_DIR, 'skills_mlb.pkl'))
+    interests_mlb = joblib.load(os.path.join(MODEL_DIR, 'interests_mlb.pkl'))
+    print("✅ ML models loaded successfully")
+except Exception as e:
+    print(f"⚠️ Could not load ML models: {e}")
+    print("📝 Using rule-based career recommendations as fallback")
 
-# Comprehensive career database with education levels and descriptions
+# Comprehensive career database
 CAREER_DATABASE = {
     "Technology": {
         "Software Engineer": {
@@ -247,57 +229,22 @@ def recommend():
         interests = interests if isinstance(interests, list) else []
         
         # Get primary recommendation
-        try:
-            print(f"Getting recommendation for: skills={skills}, interests={interests}, education={education_level}, industry={preferred_industry}")
-            primary_career = get_career_recommendation(skills, interests, education_level, preferred_industry)
-            print(f"Primary career recommended: {primary_career}")
-        except Exception as e:
-            print(f"Error in career recommendation: {e}")
-            return jsonify({"success": False, "message": "Unable to generate career recommendation. Please try with different skills or interests."})
+        primary_career = get_career_recommendation(skills, interests, education_level, preferred_industry)
         
         if not primary_career:
             return jsonify({"success": False, "message": "Unable to generate career recommendation. Please try with different skills or interests."})
         
         # Get alternative careers
-        try:
-            alternative_careers = get_alternative_careers(skills, interests, education_level, primary_career)
-        except Exception as e:
-            print(f"Error getting alternative careers: {e}")
-            alternative_careers = []
+        alternative_careers = get_alternative_careers(skills, interests, education_level, primary_career)
         
         # Calculate confidence score
-        try:
-            confidence = calculate_confidence(skills, interests, education_level, primary_career)
-        except Exception as e:
-            print(f"Error calculating confidence: {e}")
-            confidence = 0.7  # Default confidence
-        
-        # Save recommendation to database
-        try:
-            conn = sqlite3.connect('career_reco.db')
-            cursor = conn.cursor()
-            cursor.execute('''
-                INSERT INTO recommendations (name, email, education_level, skills, interests, 
-                                           preferred_industry, recommended_career, confidence_score, alternative_careers)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (name, email, education_level, json.dumps(skills), json.dumps(interests), 
-                  preferred_industry, primary_career, confidence, json.dumps(alternative_careers)))
-            conn.commit()
-            conn.close()
-        except Exception as db_error:
-            print(f"Database error: {db_error}")
-            # Continue without saving to database
+        confidence = calculate_confidence(skills, interests, education_level, primary_career)
         
         # Get career details
-        try:
-            career_details = get_career_details(primary_career)
-        except Exception as e:
-            print(f"Error getting career details: {e}")
-            return jsonify({"success": False, "message": "Career details not found. Please try again."})
+        career_details = get_career_details(primary_career)
         
         if not career_details:
-            print(f"Career '{primary_career}' not found in database. Available careers: {list_all_careers()}")
-            return jsonify({"success": False, "message": f"Career '{primary_career}' not found. Please try again with different skills or interests."})
+            return jsonify({"success": False, "message": "Career details not found. Please try again."})
         
         return jsonify({
             "success": True,
@@ -311,7 +258,6 @@ def recommend():
         })
         
     except Exception as e:
-        print(f"Recommendation error: {e}")
         return jsonify({"success": False, "message": "An error occurred while processing your request. Please try again."})
 
 @app.route("/api/careers")
@@ -331,11 +277,50 @@ def get_interests():
     return jsonify({"interests": POPULAR_INTERESTS})
 
 def get_career_recommendation(skills, interests, education_level, preferred_industry):
-    """Get career recommendation based on input parameters"""
+    """Get career recommendation using ML model if available, otherwise use rule-based"""
     
-    # Currently using rule-based recommendation only
-    # ML models are temporarily disabled for compatibility
+    # Try ML model first
+    if all([career_model, label_encoder, skills_mlb, interests_mlb]):
+        try:
+            return get_ml_career_recommendation(skills, interests, education_level, preferred_industry)
+        except Exception as e:
+            print(f"ML model failed: {e}")
+    
+    # Fallback to rule-based
     return get_rule_based_career(skills, interests, education_level, preferred_industry)
+
+def get_ml_career_recommendation(skills, interests, education_level, preferred_industry):
+    """Get career recommendation using ML model"""
+    
+    # Prepare input data
+    age = 25  # Default age
+    
+    # Encode skills
+    skills_encoded = skills_mlb.transform([skills])
+    skills_df = pd.DataFrame(skills_encoded, columns=skills_mlb.classes_)
+    
+    # Encode interests
+    interests_encoded = interests_mlb.transform([interests])
+    interests_df = pd.DataFrame(interests_encoded, columns=interests_mlb.classes_)
+    
+    # Encode education
+    education_encoded = pd.get_dummies([education_level], prefix='Education')
+    
+    # Combine features
+    X = pd.concat([pd.DataFrame({'Age': [age]}), education_encoded, skills_df, interests_df], axis=1)
+    
+    # Ensure all expected columns are present
+    expected_columns = career_model.feature_names_in_
+    for col in expected_columns:
+        if col not in X.columns:
+            X[col] = 0
+    X = X[expected_columns]
+    
+    # Make prediction
+    prediction = career_model.predict(X)
+    career_name = label_encoder.inverse_transform(prediction)[0]
+    
+    return career_name
 
 def get_rule_based_career(skills, interests, education_level, preferred_industry):
     """Rule-based career recommendation"""
@@ -344,7 +329,7 @@ def get_rule_based_career(skills, interests, education_level, preferred_industry
     skills = skills if isinstance(skills, list) else []
     interests = interests if isinstance(interests, list) else []
     
-    # Define skill and interest mappings (only careers that exist in CAREER_DATABASE)
+    # Define skill and interest mappings
     skill_mappings = {
         "programming": ["Software Engineer", "Web Developer", "Data Scientist"],
         "data": ["Data Scientist", "Business Analyst", "Financial Analyst"],
@@ -392,7 +377,7 @@ def get_rule_based_career(skills, interests, education_level, preferred_industry
             if is_career_suitable_for_education(career, education_level):
                 return career
     
-    # Default recommendations based on education level (only careers that exist in CAREER_DATABASE)
+    # Default recommendations based on education level
     default_careers = {
         "Secondary School": ["Web Developer", "Content Writer", "Digital Marketing Specialist"],
         "Diploma/Certificate": ["Nurse", "Web Developer", "Graphic Designer"],
@@ -404,7 +389,7 @@ def get_rule_based_career(skills, interests, education_level, preferred_industry
     # Get default career for education level
     default_career = default_careers.get(education_level, "Business Analyst")
     
-    # Verify the default career exists in database, if not, find any suitable career
+    # Verify the default career exists in database
     if career_exists_in_database(default_career):
         return default_career
     
@@ -419,7 +404,7 @@ def get_rule_based_career(skills, interests, education_level, preferred_industry
         for career in careers.keys():
             return career
     
-    return "Business Analyst"  # This should always exist
+    return "Business Analyst"
 
 def get_alternative_careers(skills, interests, education_level, primary_career, count=3):
     """Get alternative career suggestions"""
@@ -477,7 +462,6 @@ def calculate_confidence(skills, interests, education_level, career):
 
 def is_career_suitable_for_education(career, education_level):
     """Check if career is suitable for given education level"""
-    # Normalize education level to match database format
     normalized_education = normalize_education_level(education_level)
     
     for industry, careers in CAREER_DATABASE.items():
@@ -506,13 +490,6 @@ def get_career_details(career):
             }
     return None
 
-def list_all_careers():
-    """List all careers available in the database"""
-    all_careers = []
-    for industry, careers in CAREER_DATABASE.items():
-        all_careers.extend(list(careers.keys()))
-    return all_careers
-
 def normalize_education_level(education_level):
     """Convert frontend education level to database format"""
     mapping = {
@@ -524,11 +501,5 @@ def normalize_education_level(education_level):
     }
     return mapping.get(education_level, education_level)
 
-# Initialize database only when running locally
 if __name__ == "__main__":
-    init_db()
-    app.run(debug=True, host='0.0.0.0', port=5001)
-
-# Vercel serverless handler
-def handler(request, context):
-    return app(request, context)
+    app.run(debug=True, host='0.0.0.0', port=5002) 
