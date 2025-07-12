@@ -295,28 +295,39 @@ def get_ml_career_recommendation(skills, interests, education_level, preferred_i
     # Prepare input data
     age = 25  # Default age
     
+    # Normalize education level to match model expectations
+    education_mapping = {
+        "Secondary School": "Secondary School",
+        "Diploma/Certificate": "Diploma", 
+        "Bachelor's Degree": "Bachelor's",
+        "Master's Degree": "Master's",
+        "PhD/Doctorate": "PhD"
+    }
+    normalized_education = education_mapping.get(education_level, "Bachelor's")
+    
+    # Create a DataFrame with all expected features initialized to 0
+    expected_columns = career_model.feature_names_in_
+    X = pd.DataFrame(0, index=[0], columns=expected_columns)
+    
+    # Set age
+    X['Age'] = age
+    
+    # Set education level
+    education_col = f"Education_{normalized_education}"
+    if education_col in X.columns:
+        X[education_col] = 1
+    
     # Encode skills
     skills_encoded = skills_mlb.transform([skills])
-    skills_df = pd.DataFrame(skills_encoded, columns=skills_mlb.classes_)
+    for i, skill in enumerate(skills_mlb.classes_):
+        if skill in X.columns:
+            X[skill] = skills_encoded[0][i]
     
     # Encode interests
     interests_encoded = interests_mlb.transform([interests])
-    interests_df = pd.DataFrame(interests_encoded, columns=interests_mlb.classes_)
-    
-    # Encode education
-    education_encoded = pd.get_dummies([education_level], prefix='Education')
-    
-    # Combine features
-    X = pd.concat([pd.DataFrame({'Age': [age]}), education_encoded, skills_df, interests_df], axis=1)
-    
-    # Ensure all expected columns are present and in correct order
-    expected_columns = career_model.feature_names_in_
-    for col in expected_columns:
-        if col not in X.columns:
-            X[col] = 0
-    
-    # Reorder columns to match training data
-    X = X[expected_columns]
+    for i, interest in enumerate(interests_mlb.classes_):
+        if interest in X.columns:
+            X[interest] = interests_encoded[0][i]
     
     # Make prediction
     prediction = career_model.predict(X)
