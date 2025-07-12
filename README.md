@@ -47,7 +47,7 @@ rml/
 
 4. **Access the application**
    - Open your browser
-   - Go to: `http://localhost:5001`
+   - Go to: `http://localhost:5002`
 
 ### Vercel Deployment
 
