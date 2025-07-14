@@ -1,0 +1,6 @@
+Requirement already satisfied: setuptools in /Users/kudiratbello/.pyenv/versions/3.11.5/lib/python3.11/site-packages (80.9.0)
+Collecting wheel
+  Using cached wheel-0.45.1-py3-none-any.whl.metadata (2.3 kB)
+Using cached wheel-0.45.1-py3-none-any.whl (72 kB)
+Installing collected packages: wheel
+Successfully installed wheel-0.45.1
