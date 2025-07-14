@@ -1,205 +1,148 @@
-# AI Career Recommendation System 🚀
+# Career Recommendation System
 
-A modern, intelligent career recommendation system that helps users discover suitable career paths based on their skills, interests, and education level.
+A Flask-based web application that provides personalized career recommendations based on user skills, interests, and education level.
 
-## 🌟 Features
+## Features
 
-- **Intelligent Career Matching**: Rule-based recommendation system
-- **Multi-Industry Support**: Technology, Healthcare, Business, Education, Creative Arts, Engineering
-- **Education Level Compatibility**: Tailored recommendations for all education levels
-- **Detailed Career Information**: Salary ranges, required skills, growth potential
-- **Alternative Career Suggestions**: Multiple career options
-- **Confidence Scoring**: Shows recommendation confidence
-- **Responsive Design**: Works on all devices
+- **Personalized Career Recommendations**: Get career suggestions based on your skills, interests, and education level
+- **Alternative Career Options**: Discover multiple career paths that match your profile
+- **Detailed Career Information**: Access comprehensive details about each career including salary ranges, required skills, and growth potential
+- **Confidence Scoring**: Understand how well each recommendation matches your profile
+- **Modern Web Interface**: Clean and responsive design for optimal user experience
 
-## 🏗️ Project Structure
+## Technology Stack
 
-```
-rml/
-├── app.py                 # Main Flask application
-├── requirements.txt       # Python dependencies
-├── vercel.json           # Vercel deployment config
-├── runtime.txt           # Python version
-├── static/               # CSS, JS, and assets
-├── templates/            # HTML templates
-└── README.md            # This file
-```
-
-## 🚀 Quick Start
-
-### Local Development
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/belloibrahv/rml.git
-   cd rml
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the application**
-   ```bash
-   python app.py
-   ```
-
-4. **Access the application**
-   - Open your browser
-   - Go to: `http://localhost:5002`
-
-### Vercel Deployment
-
-1. **Connect to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Sign up/Login with GitHub
-   - Click "New Project"
-   - Import repository: `belloibrahv/rml`
-
-2. **Configure settings**
-   - Framework: `Other`
-   - Build Command: (leave empty)
-   - Output Directory: (leave empty)
-   - Install Command: `pip install -r requirements.txt`
-
-3. **Add environment variables**
-   ```
-   FLASK_ENV=production
-   FLASK_DEBUG=0
-   ```
-
-4. **Deploy**
-   - Click "Deploy"
-   - Your app will be live at: `https://your-project-name.vercel.app`
-
-## 📋 API Endpoints
-
-- `GET /` - Landing page
-- `GET /recommend` - Recommendation form
-- `GET /about` - About page
-- `POST /api/recommend` - Get career recommendations
-- `GET /api/careers` - List all careers
-- `GET /api/education-levels` - List education levels
-- `GET /api/skills` - List available skills
-- `GET /api/interests` - List available interests
-
-## 🎯 Supported Careers
-
-### Technology
-- Software Engineer
-- Data Scientist
-- Web Developer
-- Cybersecurity Analyst
-
-### Healthcare
-- Medical Doctor
-- Nurse
-- Pharmacist
-
-### Business
-- Business Analyst
-- Marketing Manager
-- Financial Analyst
-
-### Education
-- Teacher
-- School Administrator
-
-### Creative Arts
-- Graphic Designer
-- Content Writer
-- Digital Marketing Specialist
-
-### Engineering
-- Civil Engineer
-- Mechanical Engineer
-- Electrical Engineer
-
-## 🛠️ Technologies Used
-
-- **Backend**: Flask, Python
+- **Backend**: Flask (Python)
 - **Frontend**: HTML, CSS, JavaScript
-- **Deployment**: Vercel
-- **Database**: In-memory (no external dependencies)
+- **Machine Learning**: scikit-learn, joblib
+- **Data Processing**: pandas, numpy
+- **Deployment**: Render (Cloud Platform)
 
-## 📊 Features in Detail
+## Local Development
 
-### Career Database
-- 18 detailed career profiles
-- Salary information in Nigerian Naira (₦)
-- Education requirements
-- Required skills
-- Growth potential indicators
+### Prerequisites
 
-### Recommendation Algorithm
-- Skill matching analysis
-- Interest alignment
-- Education compatibility
-- Industry preference consideration
-- Fallback logic for edge cases
+- Python 3.9 or higher
+- pip (Python package installer)
 
-### User Interface
-- Responsive design
-- Modern, clean interface
-- Interactive form elements
-- Clear result presentation
+### Installation
 
-## 🔧 Development
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd rml
+```
 
-### Running in Development Mode
+2. Create a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the application:
 ```bash
 python app.py
 ```
 
-The application runs in debug mode by default, which enables:
-- Auto-reload on code changes
-- Detailed error messages
-- Development server features
+5. Open your browser and navigate to `http://localhost:5000`
 
-### Project Structure
+## Deployment
+
+### Render Deployment
+
+This application is configured for deployment on Render. Follow these steps:
+
+1. **Fork or clone** this repository to your GitHub account
+
+2. **Sign up/Login** to [Render](https://render.com)
+
+3. **Create a new Web Service**:
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Select the repository containing this project
+
+4. **Configure the service**:
+   - **Name**: `career-recommendation-app` (or your preferred name)
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
+   - **Root Directory**: Leave empty (or specify if your app is in a subdirectory)
+
+5. **Environment Variables** (optional):
+   - `FLASK_ENV`: `production`
+   - `FLASK_DEBUG`: `0`
+
+6. **Deploy**: Click "Create Web Service"
+
+The application will be automatically deployed and available at the provided URL.
+
+### Alternative Deployment Options
+
+#### Vercel Deployment
+
+The project includes `vercel.json` configuration for Vercel deployment:
+
+1. Install Vercel CLI: `npm i -g vercel`
+2. Run: `vercel` in the project directory
+3. Follow the prompts to deploy
+
+#### Heroku Deployment
+
+1. Create a `Procfile`:
 ```
-app.py              # Main Flask application
-requirements.txt    # Python dependencies
-vercel.json         # Vercel configuration
-runtime.txt         # Python version specification
-static/             # Static files (CSS, JS)
-templates/          # HTML templates
+web: gunicorn app:app
 ```
 
-## 🚀 Deployment
+2. Deploy using Heroku CLI or GitHub integration
 
-### Vercel (Recommended)
-- Automatic HTTPS
-- Global CDN
-- Serverless functions
-- Easy GitHub integration
+## API Endpoints
 
-### Other Platforms
-- Heroku
-- Railway
-- Render
-- DigitalOcean
+- `GET /` - Home page
+- `GET /recommend` - Recommendation form page
+- `GET /about` - About page
+- `POST /api/recommend` - Get career recommendations
+- `GET /api/careers` - Get all available careers
+- `GET /api/education-levels` - Get education levels
+- `GET /api/skills` - Get available skills
+- `GET /api/interests` - Get available interests
 
-## 📝 License
+## Project Structure
 
-This project is licensed under the MIT License.
+```
+rml/
+├── app.py                 # Main Flask application
+├── api/
+│   └── index.py          # API endpoint for Vercel
+├── models/               # ML model files
+│   ├── career_recommendation_model.pkl
+│   ├── career_label_encoder.pkl
+│   ├── skills_mlb.pkl
+│   └── interests_mlb.pkl
+├── static/               # Static files (CSS, JS)
+├── templates/            # HTML templates
+├── requirements.txt      # Python dependencies
+├── render.yaml          # Render deployment config
+├── vercel.json          # Vercel deployment config
+└── README.md           # This file
+```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit your changes: `git commit -am 'Add feature'`
+4. Push to the branch: `git push origin feature-name`
 5. Submit a pull request
 
-## 📞 Support
+## License
 
-If you encounter any issues:
-1. Check the troubleshooting section
-2. Review the documentation
-3. Create an issue on GitHub
+This project is licensed under the MIT License - see the LICENSE file for details.
 
----
+## Support
 
-**Made with ❤️ for helping people find their perfect career path!** 
+For support or questions, please open an issue in the GitHub repository. 
