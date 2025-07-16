@@ -419,12 +419,15 @@ def career_exists_in_database(career):
     return False
 
 def get_career_details(career):
-    """Get detailed information about a career"""
+    """Get detailed information about a career, excluding salary_range"""
     for industry, careers in CAREER_DATABASE.items():
         if career in careers:
+            details = careers[career].copy()
+            if 'salary_range' in details:
+                del details['salary_range']
             return {
                 "industry": industry,
-                "details": careers[career]
+                "details": details
             }
     return None
 
