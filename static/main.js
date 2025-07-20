@@ -1,4 +1,4 @@
-// Main JavaScript file for NDA Career AI
+// Main JavaScript file for CAREER SYSTEM
 
 // Smooth scrolling for anchor links
 document.addEventListener('DOMContentLoaded', function() {
@@ -228,6 +228,87 @@ window.api = {
     // Get careers
     getCareers: function() {
         return this.request('/api/careers');
+    }
+};
+
+// Local Storage Management
+window.localStorageManager = {
+    // Store recommendation in local storage
+    saveRecommendation: function(recommendation) {
+        try {
+            const recommendations = this.getRecommendations();
+            recommendation.id = Date.now(); // Unique ID
+            recommendation.timestamp = new Date().toISOString();
+            recommendations.unshift(recommendation); // Add to beginning
+            
+            // Keep only last 50 recommendations
+            if (recommendations.length > 50) {
+                recommendations.splice(50);
+            }
+            
+            localStorage.setItem('careerRecommendations', JSON.stringify(recommendations));
+            return true;
+        } catch (error) {
+            console.error('Error saving recommendation:', error);
+            return false;
+        }
+    },
+
+    // Get all recommendations from local storage
+    getRecommendations: function() {
+        try {
+            const stored = localStorage.getItem('careerRecommendations');
+            return stored ? JSON.parse(stored) : [];
+        } catch (error) {
+            console.error('Error getting recommendations:', error);
+            return [];
+        }
+    },
+
+    // Get recommendation by ID
+    getRecommendationById: function(id) {
+        const recommendations = this.getRecommendations();
+        return recommendations.find(rec => rec.id === id);
+    },
+
+    // Delete recommendation by ID
+    deleteRecommendation: function(id) {
+        try {
+            const recommendations = this.getRecommendations();
+            const filtered = recommendations.filter(rec => rec.id !== id);
+            localStorage.setItem('careerRecommendations', JSON.stringify(filtered));
+            return true;
+        } catch (error) {
+            console.error('Error deleting recommendation:', error);
+            return false;
+        }
+    },
+
+    // Clear all recommendations
+    clearAllRecommendations: function() {
+        try {
+            localStorage.removeItem('careerRecommendations');
+            return true;
+        } catch (error) {
+            console.error('Error clearing recommendations:', error);
+            return false;
+        }
+    },
+
+    // Get statistics
+    getStats: function() {
+        const recommendations = this.getRecommendations();
+        return {
+            total: recommendations.length,
+            thisMonth: recommendations.filter(rec => {
+                const recDate = new Date(rec.timestamp);
+                const now = new Date();
+                return recDate.getMonth() === now.getMonth() && 
+                       recDate.getFullYear() === now.getFullYear();
+            }).length,
+            averageConfidence: recommendations.length > 0 ? 
+                recommendations.reduce((sum, rec) => sum + (rec.confidence || 0), 0) / recommendations.length : 0
+        };
     }
 };
 

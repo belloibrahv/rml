@@ -37,97 +37,99 @@
 
         <section class="recommendation-section">
             <div class="container">
-                <form id="career-form" class="career-form">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="name">
-                                <i class="fas fa-user"></i>
-                                Full Name
-                            </label>
-                            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                <h2>Get Your Career Recommendation</h2>
+                <p>Tell us about your skills, interests, and educational background to get personalized career recommendations.</p>
+                
+                <form id="career-form" class="recommendation-form">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="education_level">Education Level</label>
+                        <select id="education_level" name="education_level" required>
+                            <option value="">Select your education level</option>
+                            <option value="Secondary School">Secondary School</option>
+                            <option value="Diploma/Certificate">Diploma/Certificate</option>
+                            <option value="Bachelor's Degree">Bachelor's Degree</option>
+                            <option value="Master's Degree">Master's Degree</option>
+                            <option value="PhD/Doctorate">PhD/Doctorate</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="preferred_industry">Preferred Industry (Optional)</label>
+                        <select id="preferred_industry" name="preferred_industry">
+                            <option value="">Any Industry</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Business">Business</option>
+                            <option value="Education">Education</option>
+                            <option value="Creative Arts">Creative Arts</option>
+                            <option value="Engineering">Engineering</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Skills (Select all that apply)</label>
+                        <div id="skills-grid" class="skills-grid">
+                            <!-- Skills will be loaded dynamically -->
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="email">
-                                <i class="fas fa-envelope"></i>
-                                Email Address
-                            </label>
-                            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="education-level">
-                                <i class="fas fa-graduation-cap"></i>
-                                Education Level
-                            </label>
-                            <select id="education-level" name="education_level" required>
-                                <option value="">Select your education level</option>
-                                <option value="Secondary School">Secondary School</option>
-                                <option value="Diploma/Certificate">Diploma/Certificate</option>
-                                <option value="Bachelor's Degree">Bachelor's Degree</option>
-                                <option value="Master's Degree">Master's Degree</option>
-                                <option value="PhD/Doctorate">PhD/Doctorate</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="preferred-industry">
-                                <i class="fas fa-industry"></i>
-                                Preferred Industry (Optional)
-                            </label>
-                            <select id="preferred-industry" name="preferred_industry">
-                                <option value="">Any Industry</option>
-                                <option value="Technology">Technology</option>
-                                <option value="Healthcare">Healthcare</option>
-                                <option value="Business">Business</option>
-                                <option value="Education">Education</option>
-                                <option value="Creative Arts">Creative Arts</option>
-                                <option value="Engineering">Engineering</option>
-                            </select>
+                        <div class="custom-input">
+                            <input type="text" id="custom-skill" placeholder="Add custom skill">
+                            <button type="button" id="add-skill-btn">Add</button>
                         </div>
                     </div>
                     
-                    <div class="form-section">
-                        <h3>Your Skills</h3>
-                        <p>Select or add your key skills and competencies:</p>
-                        <div class="skills-container">
-                            <div class="skills-grid" id="skills-grid">
-                                <!-- Skills will be loaded here -->
-                            </div>
-                            <div class="custom-input">
-                                <input type="text" id="custom-skill" placeholder="Add custom skill">
-                                <button type="button" id="add-skill-btn" class="btn btn-outline">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
+                    <div class="form-group">
+                        <label>Interests (Select all that apply)</label>
+                        <div id="interests-grid" class="interests-grid">
+                            <!-- Interests will be loaded dynamically -->
+                        </div>
+                        <div class="custom-input">
+                            <input type="text" id="custom-interest" placeholder="Add custom interest">
+                            <button type="button" id="add-interest-btn">Add</button>
                         </div>
                     </div>
                     
-                    <div class="form-section">
-                        <h3>Your Interests</h3>
-                        <p>Select or add your areas of interest and passion:</p>
-                        <div class="interests-container">
-                            <div class="interests-grid" id="interests-grid">
-                                <!-- Interests will be loaded here -->
-                            </div>
-                            <div class="custom-input">
-                                <input type="text" id="custom-interest" placeholder="Add custom interest">
-                                <button type="button" id="add-interest-btn" class="btn btn-outline">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-full">
-                        <i class="fas fa-magic"></i>
-                        Get My Career Recommendation
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-magic"></i> Get My Career Recommendation
                     </button>
                 </form>
+            </div>
+
+            <!-- Local History Section -->
+            <div class="local-history-section">
+                <h3><i class="fas fa-history"></i> Your Local History</h3>
+                <p>View your saved recommendations and track your career exploration journey.</p>
                 
-                <div id="result-section" class="result-section" style="display: none;">
-                    <!-- Results will be displayed here -->
+                <div id="local-stats" class="stats-section">
+                    <!-- Stats will be loaded dynamically -->
                 </div>
+                
+                <div id="recent-recommendations" class="recent-section">
+                    <h4>Recent Recommendations</h4>
+                    <p>No recommendations yet. Get started with your first career recommendation!</p>
+                </div>
+                
+                <div class="local-actions">
+                    <button onclick="clearLocalHistory()" class="btn btn-secondary">
+                        <i class="fas fa-trash"></i> Clear History
+                    </button>
+                    <button onclick="exportLocalData()" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Export Data
+                    </button>
+                </div>
+            </div>
+
+            <div id="result-section" class="result-section" style="display: none;">
+                <!-- Results will be displayed here -->
             </div>
         </section>
 
@@ -252,24 +254,36 @@
             submitBtn.disabled = true;
             
             try {
-                const response = await fetch('/api/recommend', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name: formData.get('name'),
-                        email: formData.get('email'),
-                        education_level: formData.get('education_level'),
-                        preferred_industry: formData.get('preferred_industry'),
-                        skills: skills,
-                        interests: interests
-                    })
-                });
-                
-                const data = await response.json();
+                // Try to get recommendation from API first
+                let data;
+                try {
+                    const response = await fetch('/api/recommend', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: formData.get('name'),
+                            email: formData.get('email'),
+                            education_level: formData.get('education_level'),
+                            preferred_industry: formData.get('preferred_industry'),
+                            skills: skills,
+                            interests: interests
+                        })
+                    });
+                    
+                    data = await response.json();
+                } catch (networkError) {
+                    console.log('Network unavailable, using local processing...');
+                    // Fallback to local processing
+                    data = generateLocalRecommendation(skills, interests, formData.get('education_level'), formData.get('preferred_industry'));
+                }
                 
                 if (data.success) {
+                    // Save to local storage
+                    if (window.localStorageManager) {
+                        window.localStorageManager.saveRecommendation(data);
+                    }
                     displayResult(data);
                 } else {
                     alert(data.message || 'An error occurred');
@@ -281,6 +295,88 @@
                 submitBtn.disabled = false;
             }
         });
+
+        // Local recommendation generation (fallback when network is unavailable)
+        function generateLocalRecommendation(skills, interests, educationLevel, preferredIndustry) {
+            // Simple rule-based recommendation system
+            const careerDatabase = {
+                "Technology": {
+                    "Software Engineer": {
+                        "description": "Design and develop software applications and systems",
+                        "skills": ["Programming", "Problem Solving", "Teamwork"],
+                        "growth": "High"
+                    },
+                    "Data Scientist": {
+                        "description": "Analyze complex data to help organizations make decisions",
+                        "skills": ["Statistics", "Programming", "Machine Learning"],
+                        "growth": "Very High"
+                    },
+                    "Web Developer": {
+                        "description": "Create and maintain websites and web applications",
+                        "skills": ["HTML/CSS", "JavaScript", "Design"],
+                        "growth": "High"
+                    }
+                },
+                "Healthcare": {
+                    "Medical Doctor": {
+                        "description": "Diagnose and treat patients' illnesses and injuries",
+                        "skills": ["Communication", "Critical Thinking", "Empathy"],
+                        "growth": "High"
+                    },
+                    "Nurse": {
+                        "description": "Provide patient care and support in healthcare settings",
+                        "skills": ["Patient Care", "Communication", "Teamwork"],
+                        "growth": "High"
+                    }
+                },
+                "Business": {
+                    "Business Analyst": {
+                        "description": "Analyze business processes and recommend improvements",
+                        "skills": ["Analysis", "Communication", "Problem Solving"],
+                        "growth": "High"
+                    },
+                    "Marketing Manager": {
+                        "description": "Develop and execute marketing strategies",
+                        "skills": ["Creativity", "Communication", "Analytics"],
+                        "growth": "Medium"
+                    }
+                }
+            };
+
+            // Simple matching logic
+            let primaryCareer = "Business Analyst";
+            let industry = "Business";
+            
+            if (skills.includes("Programming") || interests.includes("Technology")) {
+                primaryCareer = "Software Engineer";
+                industry = "Technology";
+            } else if (skills.includes("Healthcare") || interests.includes("Healthcare")) {
+                primaryCareer = "Medical Doctor";
+                industry = "Healthcare";
+            } else if (preferredIndustry && careerDatabase[preferredIndustry]) {
+                const careers = Object.keys(careerDatabase[preferredIndustry]);
+                primaryCareer = careers[0];
+                industry = preferredIndustry;
+            }
+
+            const careerDetails = careerDatabase[industry][primaryCareer];
+            const confidence = Math.floor(Math.random() * 30) + 70; // 70-100%
+
+            return {
+                success: true,
+                primary_career: primaryCareer,
+                alternative_careers: Object.keys(careerDatabase[industry]).filter(c => c !== primaryCareer).slice(0, 3),
+                career_details: {
+                    industry: industry,
+                    details: careerDetails
+                },
+                confidence: confidence,
+                skills_analyzed: skills,
+                interests_analyzed: interests,
+                education_level: educationLevel,
+                recommendation_method: "local_rule_based"
+            };
+        }
 
         function displayResult(data) {
             const resultSection = document.getElementById('result-section');
@@ -336,13 +432,68 @@
                             <div class="summary-item">
                                 <strong>Interests Analyzed:</strong> ${data.interests_analyzed.join(', ') || 'None'}
                             </div>
+                            <div class="summary-item">
+                                <strong>Method:</strong> ${data.recommendation_method === 'local_rule_based' ? 'Local Processing' : 'AI Analysis'}
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="local-storage-info">
+                        <p><i class="fas fa-save"></i> This recommendation has been saved to your local device</p>
                     </div>
                 </div>
             `;
             
             resultSection.style.display = 'block';
             resultSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // Update history display
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            if (window.localStorageManager) {
+                const stats = window.localStorageManager.getStats();
+                const recommendations = window.localStorageManager.getRecommendations();
+                
+                // Update stats if stats section exists
+                const statsSection = document.getElementById('local-stats');
+                if (statsSection) {
+                    statsSection.innerHTML = `
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <h3>${stats.total}</h3>
+                                <p>Total Recommendations</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3>${stats.thisMonth}</h3>
+                                <p>This Month</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3>${Math.round(stats.averageConfidence)}%</h3>
+                                <p>Avg Confidence</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Update recent recommendations if section exists
+                const recentSection = document.getElementById('recent-recommendations');
+                if (recentSection && recommendations.length > 0) {
+                    const recent = recommendations.slice(0, 5);
+                    recentSection.innerHTML = `
+                        <div class="recent-list">
+                            ${recent.map(rec => `
+                                <div class="recent-item">
+                                    <div class="recent-career">${rec.primary_career}</div>
+                                    <div class="recent-date">${new Date(rec.timestamp).toLocaleDateString()}</div>
+                                    <div class="recent-confidence">${rec.confidence}%</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+            }
         }
 
         function getConfidenceClass(confidence) {
@@ -387,7 +538,44 @@
         // Load form data on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadFormData();
+            updateHistoryDisplay(); // Initialize history display
         });
+
+        // Clear local history
+        function clearLocalHistory() {
+            if (confirm('Are you sure you want to clear all your saved recommendations? This action cannot be undone.')) {
+                if (window.localStorageManager) {
+                    window.localStorageManager.clearAllRecommendations();
+                    updateHistoryDisplay();
+                    alert('Local history cleared successfully!');
+                }
+            }
+        }
+
+        // Export local data
+        function exportLocalData() {
+            if (window.localStorageManager) {
+                const recommendations = window.localStorageManager.getRecommendations();
+                if (recommendations.length === 0) {
+                    alert('No recommendations to export.');
+                    return;
+                }
+                
+                const dataStr = JSON.stringify(recommendations, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `career-recommendations-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                alert('Data exported successfully!');
+            }
+        }
     </script>
 </body>
 </html> 
